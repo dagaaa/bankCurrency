@@ -1,9 +1,11 @@
 package sr.grpc.server;
 
 import io.grpc.stub.StreamObserver;
-import sr.grpc.gen.*;
 import sr.grpc.gen.CurrencyServiceGrpc.CurrencyServiceImplBase;
-import sr.grpc.gen.Number;
+import sr.grpc.gen.CurrencyType;
+import sr.grpc.gen.CurrencyValue;
+import sr.grpc.gen.RequestCurrency;
+import sr.grpc.gen.ResponseCurrencyWithValues;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,7 +19,7 @@ public class CurrencyServiceImpl extends CurrencyServiceImplBase {
 
     CurrencyServiceImpl() {
         for (CurrencyType c : CurrencyType.values()) {
-            currencies.put(c, 1.0);
+            currencies.put(c, 4.0);
         }
         timer.scheduleAtFixedRate(new UpdateTask(currencies),0,10_000);
     }
@@ -30,7 +32,7 @@ public class CurrencyServiceImpl extends CurrencyServiceImplBase {
             responseList=new LinkedList<>();
             System.out.println("send currency with values");
 
-            for (CurrencyType c : request.getCurrencyListList()) {
+            for (CurrencyType c : request.getCurrenciesList()) {
 
                 responseList.add(CurrencyValue.newBuilder()
                         .setCurrency(c)
@@ -38,7 +40,7 @@ public class CurrencyServiceImpl extends CurrencyServiceImplBase {
                         .build()
                 );
             }
-            ResponseCurrencyWithValues responseCurrency = ResponseCurrencyWithValues.newBuilder().addAllCurrencyValuesList(responseList).build();
+            ResponseCurrencyWithValues responseCurrency = ResponseCurrencyWithValues.newBuilder().addAllCurrencyValues(responseList).build();
             responseObserver.onNext(responseCurrency);
             try {
                 Thread.sleep(5000);

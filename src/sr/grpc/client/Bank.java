@@ -101,14 +101,14 @@ public class Bank {
 
     private void subscribe() {
         List<CurrencyType> currencyTypes = Arrays.asList(CurrencyType.CAD, CurrencyType.GBP, CurrencyType.EUR);
-        RequestCurrency requestCurrency = RequestCurrency.newBuilder().addAllCurrencyList(currencyTypes).build();
+        RequestCurrency requestCurrency = RequestCurrency.newBuilder().addAllCurrencies(currencyTypes).build();
 
         Iterator<ResponseCurrencyWithValues> currrenciesWithValues;
         currrenciesWithValues = serviceStub.subscribeForCurrency(requestCurrency);
 
         while (currrenciesWithValues.hasNext()) {
             ResponseCurrencyWithValues response = currrenciesWithValues.next();
-            for (CurrencyValue v : response.getCurrencyValuesListList()) {
+            for (CurrencyValue v : response.getCurrencyValuesList()) {
                 System.out.println(v.getCurrency() + "    " + v.getValue());
                 bankCurrencies.put(v.getCurrency(), v.getValue());
             }
