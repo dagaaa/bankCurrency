@@ -7,21 +7,27 @@ import sr.grpc.gen.Number;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Timer;
 
 public class CurrencyServiceImpl extends CurrencyServiceImplBase {
     HashMap<CurrencyType, Double> currencies = new HashMap<>();
+
+    Timer timer= new Timer();
+
 
     CurrencyServiceImpl() {
         for (CurrencyType c : CurrencyType.values()) {
             currencies.put(c, 1.0);
         }
+        timer.scheduleAtFixedRate(new UpdateTask(currencies),0,10_000);
     }
 
     @Override
     public void subscribeForCurrency(RequestCurrency request,
                                      StreamObserver<ResponseCurrencyWithValues> responseObserver) {
-        LinkedList<CurrencyValue> responseList = new LinkedList<>();
+        LinkedList<CurrencyValue> responseList ;
         while (true) {
+            responseList=new LinkedList<>();
             System.out.println("send currency with values");
 
             for (CurrencyType c : request.getCurrencyListList()) {

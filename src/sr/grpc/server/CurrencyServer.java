@@ -7,9 +7,9 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
 
-public class ArithmeticServer 
+public class CurrencyServer
 {
-	private static final Logger logger = Logger.getLogger(ArithmeticServer.class.getName());
+	private static final Logger logger = Logger.getLogger(CurrencyServer.class.getName());
 
 	private int port = 50051;
 	private Server server;
@@ -30,7 +30,7 @@ public class ArithmeticServer
 			public void run() {
 				// Use stderr here since the logger may have been reset by its JVM shutdown hook.
 				System.err.println("*** shutting down gRPC server since JVM is shutting down");
-				ArithmeticServer.this.stop();
+				CurrencyServer.this.stop();
 				System.err.println("*** server shut down");
 			}
 		});
@@ -55,7 +55,7 @@ public class ArithmeticServer
 	 * Main launches the server from the command line.
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
-		final ArithmeticServer server = new ArithmeticServer();
+		final CurrencyServer server = new CurrencyServer();
 		server.start();
 		server.blockUntilShutdown();
 	}
