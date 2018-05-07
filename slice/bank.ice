@@ -25,17 +25,21 @@ class Cost{
     Cost foreignVal;
     double plCost;
  };
+  exception DateFormatException{};
+    exception UnsupportedCurrencyException{};
+
   interface Account {
    double getBalance();
    void transfer(double money);
   };
 
   interface PremiumAccount extends Account{
-    CreditCost askForLoan(Credit credit);
+    CreditCost askForLoan(Credit credit) throws DateFormatException,UnsupportedCurrencyException;
   };
 
   interface AccountFactory{
     Account* crete(Person person, double incomes);
   };
+
 
 };
